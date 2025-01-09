@@ -145,5 +145,6 @@ If you get stuck, you can ask for help in the [Plugin Forum](https://wordpress.o
 * Fix - Check order currency on pay for order page to display supported payment methods.
 * Update - Migrate payment request settings data to express checkout settings data.
 * Update - Make the new Stripe Express Checkout Element enabled by default in all accounts.
+* Fix - Duplicate emails when enabling the gateway.
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce-gateway-stripe/trunk/changelog.txt).
