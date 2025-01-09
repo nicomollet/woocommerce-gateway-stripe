@@ -35,7 +35,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 	 * Base template for Stripe card payment method.
 	 */
 	const MOCK_CARD_PAYMENT_METHOD_TEMPLATE = [
-		'type' => WC_Stripe_Payment_Methods::CARD,
+		'type'                          => WC_Stripe_Payment_Methods::CARD,
 		WC_Stripe_Payment_Methods::CARD => [
 			'brand'     => 'visa',
 			'networks'  => [ 'preferred' => 'visa' ],
@@ -49,10 +49,11 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 	 * Base template for SEPA Direct Debit payment method.
 	 */
 	const MOCK_SEPA_PAYMENT_METHOD_TEMPLATE = [
-		'type'       => WC_Stripe_Payment_Methods::SEPA_DEBIT,
-		'object'     => 'payment_method',
+		'type'                                => WC_Stripe_Payment_Methods::SEPA_DEBIT,
+		'object'                              => 'payment_method',
 		WC_Stripe_Payment_Methods::SEPA_DEBIT => [
-			'last4' => '7061',
+			'last4'       => '7061',
+			'fingerprint' => 'fp_mock',
 		],
 	];
 
@@ -62,7 +63,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 	const MOCK_CARD_PAYMENT_INTENT_TEMPLATE = [
 		'id'                 => 'pi_mock',
 		'object'             => 'payment_intent',
-		'status'             => 'succeeded',
+		'status'             => WC_Stripe_Intent_Status::SUCCEEDED,
 		'last_payment_error' => [],
 		'client_secret'      => 'cs_mock',
 		'charges'            => [
@@ -105,7 +106,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 	 */
 	const MOCK_CARD_SETUP_INTENT_TEMPLATE = [
 		'object'           => 'setup_intent',
-		'status'           => 'succeeded',
+		'status'           => WC_Stripe_Intent_Status::SUCCEEDED,
 		'client_secret'    => 'cs_mock',
 		'last_setup_error' => [],
 	];
@@ -417,7 +418,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 
 		$mock_intent = (object) wp_parse_args(
 			[
-				'status'         => 'requires_action',
+				'status'         => WC_Stripe_Intent_Status::REQUIRES_ACTION,
 				'data'           => [
 					(object) [
 						'id'       => $order_id,
@@ -488,7 +489,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 
 		$mock_intent = (object) wp_parse_args(
 			[
-				'status'               => 'requires_action',
+				'status'               => WC_Stripe_Intent_Status::REQUIRES_ACTION,
 				'object'               => 'payment_intent',
 				'data'                 => [
 					(object) [
@@ -1075,7 +1076,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 		$setup_intent_mock['latest_charge']  = [];
 		$setup_intent_mock['latest_attempt'] = [
 			'payment_method_details' => [
-				'type'       => WC_Stripe_Payment_Methods::BANCONTACT,
+				'type'                                => WC_Stripe_Payment_Methods::BANCONTACT,
 				WC_Stripe_Payment_Methods::BANCONTACT => [
 					'generated_sepa_debit' => $generated_payment_method_id,
 				],
@@ -1337,7 +1338,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 				'id'             => $payment_intent_id,
 				'amount'         => $amount,
 				'payment_method' => $payment_method_id,
-				'status'         => 'requires_action',
+				'status'         => WC_Stripe_Intent_Status::REQUIRES_ACTION,
 				'charges'        => (object) [
 					'data' => [
 						(object) [
@@ -2142,7 +2143,7 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 						],
 					],
 				],
-				'status'               => 'requires_action',
+				'status'               => WC_Stripe_Intent_Status::REQUIRES_ACTION,
 			],
 			self::MOCK_CARD_PAYMENT_INTENT_TEMPLATE
 		);
@@ -2230,9 +2231,9 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 			->willReturn( $customer_id );
 
 		$charge = [
-			'id'                     => 'ch_mock',
-			'captured'               => true,
-			'status'                 => 'succeeded',
+			'id'       => 'ch_mock',
+			'captured' => true,
+			'status'   => 'succeeded',
 		];
 		$this->mock_gateway
 			->expects( $this->exactly( 2 ) )
@@ -2406,8 +2407,8 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 
 		// CARD
 		// Set a custom title.
-		$payment_method_type     = WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID;
-		$payment_method_settings = get_option( "woocommerce_stripe_{$payment_method_type}_settings", [] );
+		$payment_method_type              = WC_Stripe_UPE_Payment_Method_CC::STRIPE_ID;
+		$payment_method_settings          = get_option( "woocommerce_stripe_{$payment_method_type}_settings", [] );
 		$payment_method_settings['title'] = 'Custom Card Title';
 		update_option( "woocommerce_stripe_{$payment_method_type}_settings", $payment_method_settings );
 
@@ -2417,8 +2418,8 @@ class WC_Stripe_UPE_Payment_Gateway_Test extends WP_UnitTestCase {
 
 		// SEPA
 		// Set a custom title.
-		$payment_method_type     = WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID;
-		$payment_method_settings = get_option( "woocommerce_stripe_{$payment_method_type}_settings", [] );
+		$payment_method_type              = WC_Stripe_UPE_Payment_Method_Sepa::STRIPE_ID;
+		$payment_method_settings          = get_option( "woocommerce_stripe_{$payment_method_type}_settings", [] );
 		$payment_method_settings['title'] = 'Custom SEPA Title';
 		update_option( "woocommerce_stripe_{$payment_method_type}_settings", $payment_method_settings );
 
