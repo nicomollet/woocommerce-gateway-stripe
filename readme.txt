@@ -110,6 +110,8 @@ If you get stuck, you can ask for help in the [Plugin Forum](https://wordpress.o
 
 == Changelog ==
 
+= 9.2.0 - xxxx-xx-xx =
+
 = 9.1.0 - 2025-01-09 =
 * Fix - Fixes the new checkout experience not being enabled by default due to conflict with a migration.
 * Fix - Prevents duplicated credit cards to be added to the customer's account through the My Account page, the shortcode checkout and the block checkout.
