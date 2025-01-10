@@ -4,7 +4,7 @@ Tags: credit card, stripe, apple pay, payment request, google pay, sepa, bancont
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 9.1.0
+Stable tag: 9.1.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Attributions: thorsten-stripe
@@ -110,7 +110,7 @@ If you get stuck, you can ask for help in the [Plugin Forum](https://wordpress.o
 
 == Changelog ==
 
-= 9.1.1 - xxxx-xx-xx =
+= 9.1.1 - 2025-01-10 =
 * Fix - Fixes the webhook order retrieval by intent charges. The processed event is an object, not an array.
 * Fix - Payment request button fails to display when the legacy checkout experience is enabled.
 * Fix - Resolves the payment element loading issue in the legacy checkout experience.
