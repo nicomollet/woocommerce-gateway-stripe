@@ -1,6 +1,6 @@
 /* global wc_stripe_params, Stripe */
 
-jQuery( function( $ ) {
+jQuery( function($ ) {
 	'use strict';
 
 	try {
@@ -92,7 +92,7 @@ jQuery( function( $ ) {
 			elementClasses = wc_stripe_params.elements_classes ? wc_stripe_params.elements_classes : elementClasses;
 
 			if ( 'yes' === wc_stripe_params.inline_cc_form ) {
-				stripe_card = elements.create( 'card', { style: elementStyles, hidePostalCode: true } );
+				stripe_card = elements.create( 'card', { style: elementStyles, hidePostalCode: true, hideIcon: true } );
 
 				stripe_card.addEventListener( 'change', function( event ) {
 					wc_stripe_form.onCCFormChange();
@@ -102,7 +102,7 @@ jQuery( function( $ ) {
 					}
 				} );
 			} else {
-				stripe_card = elements.create( 'cardNumber', { style: elementStyles, classes: elementClasses } );
+				stripe_card = elements.create( 'cardNumber', { style: elementStyles, classes: elementClasses, showIcon: false } );
 				stripe_exp  = elements.create( 'cardExpiry', { style: elementStyles, classes: elementClasses } );
 				stripe_cvc  = elements.create( 'cardCvc', { style: elementStyles, classes: elementClasses } );
 
@@ -719,6 +719,7 @@ jQuery( function( $ ) {
 			if( wc_stripe_form.form.attr('id') === 'order_review' ) {
 				formFields._ajax_nonce = wc_stripe_params.updatePaymentIntentNonce;
 				formFields.order_id = wc_stripe_params.orderId;
+				formFields.stripe_order_key = wc_stripe_params.stripe_order_key;
 
 				$.ajax( {
 					url: wc_stripe_form.getAjaxURL( payment_method + '_update_payment_intent' ),
@@ -829,7 +830,7 @@ jQuery( function( $ ) {
 		 */
 		onError: function( e, result ) {
 			var message = result.error.message;
-			var selectedMethodElement = wc_stripe_form.getSelectedPaymentElement().closest( 'li' );
+			var selectedMethodElement = wc_stripe_form.getSelectedPaymentElement().closest( '.wc_payment_method' );
 			var savedTokens = selectedMethodElement.find( '.woocommerce-SavedPaymentMethods-tokenInput' );
 			var errorContainer;
 

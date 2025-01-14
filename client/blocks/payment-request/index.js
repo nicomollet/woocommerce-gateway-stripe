@@ -1,4 +1,5 @@
 import { getSetting } from '@woocommerce/settings';
+import { __ } from '@wordpress/i18n';
 import { PAYMENT_METHOD_NAME } from './constants';
 import { PaymentRequestExpress } from './payment-request-express';
 import { applePayImage } from './apple-pay-preview';
@@ -12,8 +13,21 @@ const ApplePayPreview = () => <img src={ applePayImage } alt="" />;
 
 const componentStripePromise = loadStripe();
 
+const supports = {
+	features: getBlocksConfiguration()?.supports ?? [],
+};
+if ( getBlocksConfiguration().isAdmin ?? false ) {
+	supports.style = getBlocksConfiguration()?.style ?? [];
+}
+
 const paymentRequestPaymentMethod = {
 	name: PAYMENT_METHOD_NAME,
+	title: 'Stripe',
+	description: __(
+		'This will show users the ApplePay, GooglePay, or Stripe Link button depending on their browser and logged in status.',
+		'woocommerce-gateway-stripe'
+	),
+	gatewayId: 'stripe',
 	content: <PaymentRequestExpress stripe={ componentStripePromise } />,
 	edit: <ApplePayPreview />,
 	canMakePayment: ( cartData ) => {
@@ -56,9 +70,7 @@ const paymentRequestPaymentMethod = {
 		} );
 	},
 	paymentMethodId: 'stripe',
-	supports: {
-		features: getBlocksConfiguration()?.supports ?? [],
-	},
+	supports,
 };
 
 export default paymentRequestPaymentMethod;
